@@ -381,6 +381,8 @@ optstring(struct skynet_context *ctx, const char *key, const char * str) {
 
 static int
 init_cb(struct snlua *l, struct skynet_context *ctx, const char * args, size_t sz) {
+	
+	printf("test - pang init_cb");
 	lua_State *L = l->L;
 	l->ctx = ctx;
 	lua_gc(L, LUA_GCSTOP, 0);

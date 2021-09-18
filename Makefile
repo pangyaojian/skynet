@@ -8,6 +8,9 @@ SKYNET_BUILD_PATH ?= .
 CFLAGS = -g -O2 -Wall -I$(LUA_INC) $(MYCFLAGS)
 # CFLAGS += -DUSE_PTHREAD_LOCK
 
+testPang:
+	@echo "nihao"
+
 # lua
 
 LUA_STATICLIB := 3rd/lua/liblua.a
@@ -50,10 +53,10 @@ update3rd :
 
 # skynet
 
-CSERVICE = snlua logger gate harbor
+CSERVICE = snlua logger gate harbor 
 LUA_CLIB = skynet \
   client \
-  bson md5 sproto lpeg $(TLS_MODULE)
+  bson md5 sproto lpeg so1 lkcp lutil $(TLS_MODULE)
 
 LUA_CLIB_SKYNET = \
   lua-skynet.c lua-seri.c \
@@ -76,7 +79,8 @@ SKYNET_SRC = skynet_main.c skynet_handle.c skynet_module.c skynet_mq.c \
   skynet_harbor.c skynet_env.c skynet_monitor.c skynet_socket.c socket_server.c \
   malloc_hook.c skynet_daemon.c skynet_log.c
 
-all : \
+
+all :\
   $(SKYNET_BUILD_PATH)/skynet \
   $(foreach v, $(CSERVICE), $(CSERVICE_PATH)/$(v).so) \
   $(foreach v, $(LUA_CLIB), $(LUA_CLIB_PATH)/$(v).so) 
@@ -117,6 +121,15 @@ $(LUA_CLIB_PATH)/ltls.so : lualib-src/ltls.c | $(LUA_CLIB_PATH)
 
 $(LUA_CLIB_PATH)/lpeg.so : 3rd/lpeg/lpcap.c 3rd/lpeg/lpcode.c 3rd/lpeg/lpprint.c 3rd/lpeg/lptree.c 3rd/lpeg/lpvm.c | $(LUA_CLIB_PATH)
 	$(CC) $(CFLAGS) $(SHARED) -I3rd/lpeg $^ -o $@ 
+
+$(LUA_CLIB_PATH)/so1.so : 3rd/so1/so1.c | $(LUA_CLIB_PATH)
+	$(CC) $(CFLAGS) $(SHARED) -I3rd/so1 $^ -o $@ 
+
+$(LUA_CLIB_PATH)/lkcp.so : 3rd/kcp/lkcp.c 3rd/kcp/ikcp.c | $(LUA_CLIB_PATH)
+	$(CC) $(CFLAGS) $(SHARED) -I3rd/lkcp $^ -o $@ 
+
+$(LUA_CLIB_PATH)/lutil.so : 3rd/lutil/lutil.c  | $(LUA_CLIB_PATH)
+	$(CC) $(CFLAGS) $(SHARED) -I3rd/lutil $^ -o $@ 
 
 clean :
 	rm -f $(SKYNET_BUILD_PATH)/skynet $(CSERVICE_PATH)/*.so $(LUA_CLIB_PATH)/*.so && \

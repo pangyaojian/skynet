@@ -25,6 +25,7 @@
 #include "lstate.h"
 #include "lundump.h"
 
+
 static void PrintFunction(const Proto* f, int full);
 #define luaU_print	PrintFunction
 
@@ -196,6 +197,7 @@ static int pmain(lua_State* L)
 
 int main(int argc, char* argv[])
 {
+ printf("lua-inner main");
  lua_State* L;
  int i=doargs(argc,argv);
  argc-=i; argv+=i;

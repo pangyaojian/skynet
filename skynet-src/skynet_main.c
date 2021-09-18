@@ -116,6 +116,7 @@ static const char * load_config = "\
 
 int
 main(int argc, char *argv[]) {
+	
 	const char * config_file = NULL ;
 	if (argc > 1) {
 		config_file = argv[1];
@@ -136,7 +137,7 @@ main(int argc, char *argv[]) {
 	// init the lock of code cache
 	luaL_initcodecache();
 #endif
-
+	printf("\nskynet_main.c main -pang %s\n",config_file);
 	struct lua_State *L = luaL_newstate();
 	luaL_openlibs(L);	// link lua lib
 
@@ -160,6 +161,7 @@ main(int argc, char *argv[]) {
 	config.logger = optstring("logger", NULL);
 	config.logservice = optstring("logservice", "logger");
 	config.profile = optboolean("profile", 1);
+	config.so1 = optstring("so1", NULL);
 
 	lua_close(L);
 

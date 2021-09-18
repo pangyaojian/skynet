@@ -23,6 +23,7 @@ static struct modules * M = NULL;
 
 static void *
 _try_open(struct modules *m, const char * name) {
+	printf("log-- _try_open%s\n",name);
 	const char *l;
 	const char * path = m->path;
 	size_t path_size = strlen(path);
@@ -175,7 +176,7 @@ skynet_module_init(const char *path) {
 	struct modules *m = skynet_malloc(sizeof(*m));
 	m->count = 0;
 	m->path = skynet_strdup(path);
-
+	printf("skynet_module_init %s\n",m->path);
 	SPIN_INIT(m)
 
 	M = m;
